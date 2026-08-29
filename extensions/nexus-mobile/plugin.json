@@ -1,0 +1,21 @@
+{
+  "$schema": "https://acode.app/schema/plugin/v0.1.0.json",
+  "id": "com.azamkassim.nexus.mobile",
+  "name": "NEXUS Mobile Console",
+  "main": "main.js",
+  "version": "0.1.0",
+  "readme": "readme.md",
+  "changelogs": "changelogs.md",
+  "repository": "https://github.com/azamkassim/Acode.git",
+  "icon": "icon.png",
+  "files": [],
+  "minVersionCode": 958,
+  "license": "MIT",
+  "keywords": ["nexus", "termux", "local", "developer", "console"],
+  "price": 0,
+  "permissions": [],
+  "author": {
+    "name": "Azam Kassim",
+    "github": "azamkassim"
+  }
+}
