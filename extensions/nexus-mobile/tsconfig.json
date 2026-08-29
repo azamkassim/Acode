@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2021",
+    "lib": ["es2021", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
