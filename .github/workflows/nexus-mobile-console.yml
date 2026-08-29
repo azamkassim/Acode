@@ -1,0 +1,54 @@
+name: NEXUS Mobile Console
+
+on:
+  pull_request:
+    paths:
+      - "extensions/nexus-mobile/**"
+      - "tools/nexus-mobile-bridge/**"
+      - ".github/workflows/nexus-mobile-console.yml"
+  push:
+    branches:
+      - nexus-mobile-console
+    paths:
+      - "extensions/nexus-mobile/**"
+      - "tools/nexus-mobile-bridge/**"
+      - ".github/workflows/nexus-mobile-console.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  plugin:
+    name: Plugin build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: extensions/nexus-mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+
+  bridge:
+    name: Termux bridge validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m py_compile tools/nexus-mobile-bridge/nexus_mobile_bridge.py
+      - name: Exercise health endpoint
+        run: |
+          python tools/nexus-mobile-bridge/nexus_mobile_bridge.py --config /tmp/nexus-mobile-empty.json --port 18766 >/tmp/nexus-mobile.out 2>/tmp/nexus-mobile.err &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          sleep 1
+          curl --fail --silent http://127.0.0.1:18766/nexus-mobile/v1/health | python -m json.tool
+          curl --fail --silent http://127.0.0.1:18766/nexus-mobile/v1/services | python -m json.tool
