@@ -1,0 +1,21 @@
+{
+  "services": [
+    {
+      "id": "kiwi",
+      "name": "KIWI Core",
+      "host": "127.0.0.1",
+      "port": 8765
+    }
+  ],
+  "projects": [
+    {
+      "id": "example-project",
+      "name": "Example Project",
+      "path": "~/nexus-workspace/example-project",
+      "test_command": ["python", "-m", "pytest", "-q"],
+      "test_timeout_seconds": 180
+    }
+  ],
+  "logs": [],
+  "ai": null
+}

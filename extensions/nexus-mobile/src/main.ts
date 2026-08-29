@@ -25,7 +25,7 @@ class NexusMobilePlugin {
   async destroy(): Promise<void> {
     const commands = acode.require("commands");
     Object.values(COMMANDS).forEach((name) => commands.removeCommand(name));
-    const sideBarApps = acode.require("sidebarApps");
+    const sideBarApps = acode.require("sidebarApps") as any;
     try {
       sideBarApps.remove?.(plugin.id);
     } catch {
@@ -68,7 +68,7 @@ class NexusMobilePlugin {
   }
 
   private registerSidebar(): void {
-    const sideBarApps = acode.require("sidebarApps");
+    const sideBarApps = acode.require("sidebarApps") as any;
     sideBarApps.add(
       "icon-terminal",
       plugin.id,
@@ -89,7 +89,7 @@ class NexusMobilePlugin {
   private async open(): Promise<void> {
     if (!this.page) return;
     this.page.innerHTML = this.pageMarkup();
-    this.bindPageActions(this.page);
+    this.bindPageActions(this.page as unknown as HTMLElement);
     this.page.show();
     await this.refresh();
   }
@@ -113,9 +113,10 @@ class NexusMobilePlugin {
         this.container.innerHTML = this.panelMarkup(snapshot);
         this.bindPanelActions(this.container);
       }
-      if (this.page?.isConnected) {
+      const pageElement = this.page as unknown as HTMLElement | undefined;
+      if (this.page && pageElement?.isConnected) {
         this.page.innerHTML = this.pageMarkup(snapshot);
-        this.bindPageActions(this.page);
+        this.bindPageActions(pageElement);
       }
       this.setOutput(
         snapshot.bridge === "online"

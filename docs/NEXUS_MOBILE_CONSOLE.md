@@ -10,7 +10,7 @@
 Acode                    Termux
 -----                    ------
 Editor / UI              Canonical Git workspace
-Sidebar cockpit   <-->   Local bridge
+Sidebar cockpit   <-->   Local bridge :8766
 Command palette          Tests
 Selection context        Services
 Status display           Logs
@@ -27,9 +27,13 @@ The Acode plugin only permits HTTP(S) URLs whose host is one of:
 - `localhost`
 - `::1`
 
-The bridge should bind to loopback only. It should expose a narrow API and map requests to an explicit allow-list. It must not accept raw shell commands from Acode.
+The bridge binds to `127.0.0.1:8766` by default. Port `8765` remains available to the existing KIWI Core service.
+
+The bridge exposes a narrow API and maps requests to an explicit allow-list. It does not accept raw shell commands from Acode.
 
 ### v1 API contract
+
+Base URL: `http://127.0.0.1:8766/nexus-mobile/v1`
 
 `GET /health`
 
@@ -65,7 +69,7 @@ The bridge should bind to loopback only. It should expose a narrow API and map r
 { "projectId": null }
 ```
 
-The bridge chooses the test command. The plugin never sends an arbitrary command string.
+The bridge chooses the test command from its local config. The plugin never sends an arbitrary command string.
 
 `POST /ai/explain`
 
@@ -73,7 +77,7 @@ The bridge chooses the test command. The plugin never sends an arbitrary command
 { "text": "user-selected code or error text" }
 ```
 
-This endpoint must route only to a local model unless a later policy explicitly authorizes another destination.
+This endpoint routes only to a configured loopback model endpoint.
 
 ## Fork governance
 
@@ -89,11 +93,11 @@ This endpoint must route only to a local model unless a later policy explicitly 
 |---|---|---|
 | 1. Fork governance | Complete | isolated branch + documented boundary |
 | 2. Plugin skeleton | Complete | TypeScript Acode plugin scaffold |
-| 3. Termux bridge client | Complete on Acode side | loopback-only typed client and API contract |
+| 3. Termux bridge | Complete v0.1 | loopback-only reference server + typed client |
 | 4. Dashboard | Complete v0.1 | services, projects, logs, tests |
-| 5. Local AI | Complete client v0.1 | explain-selection endpoint |
-| 6. One-tap workflow | Partial | governed test action only; build/deploy stays blocked until Termux allow-list is audited |
+| 5. Local AI | Complete client/server path v0.1 | explain-selection to loopback OpenAI-compatible model |
+| 6. One-tap workflow | Partial by design | governed test action only; build/deploy and service-control actions are withheld until explicitly allow-listed and audited |
 
-## Next runtime dependency
+## Runtime replacement note
 
-The Termux-side `nexus-mobile` implementation must satisfy this API contract. Because the existing CLI was previously observed with a shell syntax error, it should be repaired/replaced independently in Termux rather than compensated for inside Acode.
+The companion bridge is independent of the previously broken `nexus-mobile` shell CLI. It can replace that discovery/status transport without moving runtime ownership into Acode. Service restart/kill functionality remains intentionally absent from v0.1.

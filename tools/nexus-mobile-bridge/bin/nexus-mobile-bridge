@@ -1,0 +1,5 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -Eeuo pipefail
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+exec python "$SCRIPT_DIR/nexus_mobile_bridge.py" "$@"

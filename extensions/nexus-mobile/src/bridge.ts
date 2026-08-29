@@ -22,7 +22,7 @@ export interface NexusSnapshot {
 }
 
 const STORAGE_KEY = "nexus.mobile.bridgeUrl";
-const DEFAULT_URL = "http://127.0.0.1:8765/nexus-mobile/v1";
+const DEFAULT_URL = "http://127.0.0.1:8766/nexus-mobile/v1";
 
 export class BridgeClient {
   get baseUrl(): string {
@@ -110,7 +110,11 @@ export function normalizeLoopbackUrl(value: string): string {
   const trimmed = value.trim().replace(/\/+$/, "");
   const url = new URL(trimmed);
   const host = url.hostname.toLowerCase();
-  const allowed = host === "127.0.0.1" || host === "localhost" || host === "::1" || host === "[::1]";
+  const allowed =
+    host === "127.0.0.1" ||
+    host === "localhost" ||
+    host === "::1" ||
+    host === "[::1]";
   if (!allowed) {
     throw new Error("NEXUS Mobile only permits loopback bridge URLs.");
   }

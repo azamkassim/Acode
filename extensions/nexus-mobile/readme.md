@@ -30,7 +30,9 @@ The Termux-side bridge remains responsible for command allow-lists, project owne
 
 Default bridge contract:
 
-`http://127.0.0.1:8765/nexus-mobile/v1`
+`http://127.0.0.1:8766/nexus-mobile/v1`
+
+Port `8766` is intentionally separate from the existing KIWI Core service on `8765`.
 
 Expected endpoints:
 
@@ -40,6 +42,8 @@ Expected endpoints:
 - `GET /logs?limit=200`
 - `POST /actions/test`
 - `POST /ai/explain`
+
+A reference Termux implementation is included under `tools/nexus-mobile-bridge`.
 
 ## Build
 
