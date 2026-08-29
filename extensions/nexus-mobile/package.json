@@ -1,0 +1,23 @@
+{
+  "name": "nexus-mobile-console",
+  "version": "0.1.0",
+  "description": "Local-only NEXUS developer cockpit for Acode with a loopback Termux bridge.",
+  "main": "dist/main.js",
+  "repository": "https://github.com/azamkassim/Acode.git",
+  "author": "Azam Kassim",
+  "license": "MIT",
+  "dependencies": {
+    "acode-plugin-types": "^1.12.9"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "jszip": "^3.10.1",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "dev": "node esbuild.config.mjs --serve",
+    "build": "tsc --noEmit && node esbuild.config.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "browserslist": "cover 100%,not android < 5"
+}
